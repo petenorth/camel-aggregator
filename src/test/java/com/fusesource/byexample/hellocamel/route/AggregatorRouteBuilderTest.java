@@ -9,6 +9,7 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
@@ -33,11 +34,12 @@ public class AggregatorRouteBuilderTest extends CamelTestSupport {
     @EndpointInject( uri = "mock:direct:start")
     protected MockEndpoint directEndpoint;
     
-    @EndpointInject(uri = "mock:file:/home/pfry/aggregator/")
-    protected MockEndpoint fileEndpoint;
-    
 	@Test
-	public void test() throws InterruptedException {
+	public void test() throws Exception {
+		
+		String outputpath = context().resolvePropertyPlaceholders("{{aggregator.outputpath}}");
+		MockEndpoint fileEndpoint = getMockEndpoint("mock:file:" + outputpath);
+		
         String aggregationid = Integer.toString(new Random().nextInt());
     
         fooProducer.sendBodyAndHeader("Scott", "aggregationid", aggregationid);
@@ -68,6 +70,9 @@ public class AggregatorRouteBuilderTest extends CamelTestSupport {
         activeMQComponent.setPassword(BROKER_PASSWORD);
         activeMQComponent.setUserName(BROKER_USERNAME);
     	camelContext.addComponent("activemq", activeMQComponent);
+        PropertiesComponent pc = new PropertiesComponent();
+        pc.setLocation("file://" + System.getProperty("properties.path"));
+        camelContext.addComponent("properties", pc);
     	return camelContext;
     }
 

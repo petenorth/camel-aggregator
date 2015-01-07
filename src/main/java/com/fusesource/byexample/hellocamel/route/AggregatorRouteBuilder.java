@@ -7,7 +7,7 @@ public class AggregatorRouteBuilder extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		
+
 		from("activemq:foo").to("direct:start");
 		from("activemq:bar").to("direct:start");
 		from("activemq:and").to("direct:start");
@@ -16,7 +16,7 @@ public class AggregatorRouteBuilder extends RouteBuilder {
 	    .aggregate(header("aggregationid"))
 	        .aggregationStrategy(new StringAggregationStrategy())
 	        .completionSize(3)
-	    .to("file:///home/pfry/aggregator/");
+	    .to("file://{{aggregator.outputpath}}");
 
 	}
 

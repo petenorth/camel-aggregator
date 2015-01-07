@@ -10,13 +10,25 @@ A corresponding 'direct:start' consumer then aggregates the messages correlating
 * Maven 3.x (http://maven.apache.org/)
 * Java SE 6
 
+Prebuild
+--------
+
+cat ><JBOSS FUSE HOME>/etc/aggregatorapp.cfg <<EOL
+brokerurl=tcp://localhost:61616
+brokerusername=admin
+brokerpassword=admin
+aggregator.outputpath=<SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
+EOL
+
+mkdir <SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
+
+
 Building
 --------
 
 To build
 
-    mkdir ~/aggregator
-    mvn clean install
+    mvn clean install -Dproperties.path=<JBOSS FUSE HOME>/etc/aggregatorapp.cfg
 
 To build without running the unit test
 
@@ -25,25 +37,14 @@ To build without running the unit test
 Running from the command line
 -----------------------------
 
-To test Standalone, you can start the Camel route using the included camel-maven-plugin, which will
-start all Spring based camel context files located in `META-INF/spring` (like this projects)
-
-    mvn camel:run
-
 To run the standalone client, which will a message to three queues ('foo', 'bar', 'and') with content 'Scott', 'Brad' and 'Gary' respectively
 
     mvn exec:java
 
-Then look at output found in ~/aggregator
+Then look at output found in <SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
 
 Deploying to JBoss Fuse
 -----------------------
-
-cat ><JBoss Fuse Home>/etc/aggregatorapp.cfg <<EOL
-brokerurl=tcp://localhost:61616
-brokerusername=admin
-brokerpassword=admin
-EOL
 
 To install in JBoss Fuse
 

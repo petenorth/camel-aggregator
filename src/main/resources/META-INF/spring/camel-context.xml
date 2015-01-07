@@ -33,6 +33,7 @@
 	<bean id="userRoutes" class="com.fusesource.byexample.hellocamel.route.AggregatorRouteBuilder" />
 
 	<camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
-		<routeBuilder ref="userRoutes" />
-	</camelContext>
+       <propertyPlaceholder location="file:${karaf.home}/etc/aggregatorapp.cfg" id="properties"/>
+       <routeBuilder ref="userRoutes"/>
+    </camelContext>
 </beans>
