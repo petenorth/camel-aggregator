@@ -14,10 +14,12 @@ Prebuild
 --------
 
 cat ><JBOSS FUSE HOME>/etc/aggregatorapp.cfg <<EOL
+
 brokerurl=tcp://localhost:61616
 brokerusername=admin
 brokerpassword=admin
 aggregator.outputpath=<SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
+
 EOL
 
 mkdir <SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
