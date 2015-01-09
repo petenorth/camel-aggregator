@@ -29,11 +29,11 @@ Prebuild
 Building
 --------
 
-To build (note that the 
+To build
 
     mvn clean install -Dproperties.path=<JBOSS FUSE HOME>/etc/aggregatorapp.cfg
 
-Note that ONLY the aggregator.outputpath are USED by the unit test. 
+Note that ONLY the aggregator.outputpath from the aggregatorapp.cfg properties file are USED by the unit test. 
 
 To build without running the unit test
 
