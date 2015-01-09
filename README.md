@@ -67,7 +67,7 @@ run the following command
 
     mvn exec:java
 
-Then look at output found in <SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>. There should only be files corresponding to the CountryCode header of UK in this directory (study the aggregatorapp.cfg file created previously).
+Then look at output found in the value used for aggregator.outputpath . There should only be files corresponding to the CountryCode header of UK in this directory (study the aggregatorapp.cfg file created previously).
 
 Deploying to JBoss Fuse (Fabric)
 --------------------------------
@@ -76,43 +76,45 @@ For background see:
 
 https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.1/html/Fabric_Guide/index.html
 
-In the JBoss Fuse Console
+In the JBoss Fuse Console create a Fuse fabric
 
 	karaf@root> fabric:create --new-user admin --new-user-password admin --zookeeper-password admin --wait-for-provisioning
 
-this creates a Fuse fabric
+then create two fabric child container 
 
 	karaf@root> fabric:container-create-child root child 2
 
-this creates two child containers
+then confirm what has been created
 
 	karaf@root> fabric:container-list
 
-This will confirm what you have created.
+Create a profile based on the feature-camel profile, it will be used as the basis for the profiles that we will use for the two containers.
 
 	karaf@root> fabric:profile-create --parents feature-camel aggregator-app
 
-This creates a profile based on the feature-camel profile, it will be used as the basis for the profiles that we will use for the two containers.
+Create two profiles based on the aggregator-app profile created previously.
 
 	karaf@root> fabric:profile-create --parents aggregator-app aggregator-app-child1
 	karaf@root> fabric:profile-create --parents aggregator-app aggregator-app-child2
 
-This creates two profiles based on the aggregator-app profile created previously.
+Open the fabric profile editor for the parent profile
 
 	karaf@root> fabric:profile-edit aggregator-app
 
-This will open the fabric profile editor, edit it so that it has the following contents:
+edit it so that it has the following contents
 
 	attribute.parents = feature-camel
 	repository.apache-activemq=mvn:org.apache.activemq/activemq-karaf/${version:activemq}/xml/features
 	feature.mq-camel = mq-fabric-camel
 	bundle.aggregator=mvn:com.fusesource.byexample.hellocamel/HelloCamel/1.0.0
 
-save and exit. Then
+save and exit.
+
+Open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child1 profile 
 
 	karaf@root> fabric:profile-edit --pid aggregatorapp aggregator-app-child1
 
-This will open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child1 profile , edit it so that it has the following contents:
+edit it so that it has the following contents:
 
 	brokerurl=tcp://localhost:61616
 	#brokerurl=failover://tcp://amq-node2:61616,tcp://amq-node1:61616
@@ -121,11 +123,13 @@ This will open the fabric editor for the PID properties 'aggregatorapp' for the 
 	aggregator.outputpath=<PATH TO WHERE YOU WANT THE UK MESSAGES TO GO>
         country.code=UK
 
-save and exit. Then
+save and exit.
+
+Open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child2 profile 
 
 	karaf@root> fabric:profile-edit --pid aggregatorapp aggregator-app-child2
 
-This will open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child1 profile , edit it so that it has the following contents:
+edit it so that it has the following contents:
 
 	brokerurl=tcp://localhost:61616
 	#brokerurl=failover://tcp://amq-node2:61616,tcp://amq-node1:61616
@@ -134,7 +138,7 @@ This will open the fabric editor for the PID properties 'aggregatorapp' for the 
 	aggregator.outputpath=<PATH TO WHERE YOU WANT THE US MESSAGES TO GO>
 	country.code=US
 
-save and exit. Then
+save and exit. Then associate the profiles with the child containers.
 
 	karaf@root> fabric:container-change-profile child1 aggregator-app-child1
 	karaf@root> fabric:container-change-profile child2 aggregator-app-child2

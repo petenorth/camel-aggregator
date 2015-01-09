@@ -60,13 +60,14 @@ There are two standalone clients AppJMS and AppClient. The former uses the Activ
 To run the standalone client (AppJMS), which concurrently will
 
 1) send messages to three queues ('foo', 'bar', 'and') with content 'Scott UK', 'Brad' and 'Gary' respectively all with a random aggregatorid header and a CountryCode header of UK.
+
 2) send messages to three queues ('foo', 'bar', 'and') with content 'Scott US', 'Brad' and 'Gary' respectively all with a random aggregatorid header and a CountryCode header of US.
 
 run the following command
 
     mvn exec:java
 
-Then look at output found in <SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>. There should only be files corresponding to the CountryCode header of UK in this directory (study the aggregatorapp.cfg file created previously).
+Then look at output found in the value used for aggregator.outputpath . There should only be files corresponding to the CountryCode header of UK in this directory (study the aggregatorapp.cfg file created previously).
 
 Deploying to JBoss Fuse (Fabric)
 --------------------------------
