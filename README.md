@@ -57,9 +57,10 @@ Running from the command line
 
 There are two standalone clients AppJMS and AppClient. The former uses the ActiveMQ JMS API and the latter uses the ProducerTemplate available in Apache Camel. The former executes cleanly where as the latter prints out some warning error messages. The AppJMS client is multi-threaded and generates messages for two different country codes 'UK' and 'US'. 
 
-To run the standalone client (AppJMS), which will (concurrently)
+To run the standalone client (AppJMS), which concurrently will
 
 1) send messages to three queues ('foo', 'bar', 'and') with content 'Scott UK', 'Brad' and 'Gary' respectively all with a random aggregatorid header and a CountryCode header of UK.
+
 2) send messages to three queues ('foo', 'bar', 'and') with content 'Scott US', 'Brad' and 'Gary' respectively all with a random aggregatorid header and a CountryCode header of US.
 
 run the following command
