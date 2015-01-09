@@ -121,7 +121,7 @@ edit it so that it has the following contents:
 	brokerusername=admin
 	brokerpassword=admin
 	aggregator.outputpath=<PATH TO WHERE YOU WANT THE UK MESSAGES TO GO>
-        country.code=UK
+	country.code=UK
 
 save and exit.
 
