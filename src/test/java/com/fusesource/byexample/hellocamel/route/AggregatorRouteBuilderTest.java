@@ -1,5 +1,7 @@
 package com.fusesource.byexample.hellocamel.route;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.activemq.camel.component.ActiveMQComponent;
@@ -12,6 +14,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
+import org.pfry.camel.aggregator.route.AggregatorRouteBuilder;
 
 public class AggregatorRouteBuilderTest extends CamelTestSupport {
 	
@@ -41,16 +44,28 @@ public class AggregatorRouteBuilderTest extends CamelTestSupport {
 		MockEndpoint fileEndpoint = getMockEndpoint("mock:file:" + outputpath);
 		
         String aggregationid = Integer.toString(new Random().nextInt());
+        String countryCode = "UK";
+        
+        Map<String, Object> headers = createHeaders(aggregationid,
+				countryCode);
     
-        fooProducer.sendBodyAndHeader("Scott", "aggregationid", aggregationid);
-        barProducer.sendBodyAndHeader("Brad", "aggregationid", aggregationid);
-        andProducer.sendBodyAndHeader("Gary", "aggregationid", aggregationid);
+        fooProducer.sendBodyAndHeaders("Scott", headers);
+        barProducer.sendBodyAndHeaders("Brad", headers);
+        andProducer.sendBodyAndHeaders("Gary", headers);
 		
 		directEndpoint.expectedMessageCount(3);
 		directEndpoint.assertIsSatisfied();
 		
 		fileEndpoint.expectedMessageCount(1);
 		fileEndpoint.assertIsSatisfied();
+	}
+
+	private Map<String, Object> createHeaders(String aggregationid,
+			String countryCode) {
+		Map<String,Object> headersFoo = new HashMap<String,Object>();
+        headersFoo.put("aggregationid", aggregationid);
+		headersFoo.put("CountryCode", countryCode);
+		return headersFoo;
 	}
 	
 	@Override
@@ -60,7 +75,9 @@ public class AggregatorRouteBuilderTest extends CamelTestSupport {
 	
     @Override
     protected RouteBuilder createRouteBuilder() {
-        return new AggregatorRouteBuilder();
+        AggregatorRouteBuilder routeBuilder = new AggregatorRouteBuilder();
+        routeBuilder.setCountryCode("UK");
+        return routeBuilder;
     }
     
     @Override

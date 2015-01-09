@@ -1,4 +1,4 @@
-package com.fusesource.byexample.hellocamel.route;
+package org.pfry.camel.aggregator.route;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;

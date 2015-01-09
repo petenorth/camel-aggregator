@@ -24,16 +24,17 @@
     <property-placeholder xmlns="http://www.springframework.org/schema/context" properties-ref="preProps" /> 
 
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-		<!--<property name="brokerURL" value="tcp://localhost:61616" />-->
 		<property name="brokerURL" value="${brokerurl}"/>
 		<property name="userName" value="admin"/>
 		<property name="password" value="admin"/>
 	</bean>
 
-	<bean id="userRoutes" class="com.fusesource.byexample.hellocamel.route.AggregatorRouteBuilder" />
+	<bean id="userRoutes" class="org.pfry.camel.aggregator.route.AggregatorRouteBuilder" >
+	    <property name="countryCode" value="${country.code}"/>
+	</bean>
 
 	<camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
-       <propertyPlaceholder location="file:${karaf.home}/etc/aggregatorapp.cfg" id="properties"/>
+       <propertyPlaceholder location="ref:preProps" id="properties"  />
        <routeBuilder ref="userRoutes"/>
     </camelContext>
 </beans>
