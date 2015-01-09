@@ -14,9 +14,6 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
  
-/**
- * Hello world!
- */
 public class AppJMS {
  
 	private static final String BROKER_USERNAME = "admin";

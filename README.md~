@@ -77,28 +77,28 @@ https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.1/html/Fabric
 
 In the JBoss Fuse Console
 
-	karaf@root> fabric:create --new-user admin --new-user-password admin --zookeeper-password admin --wait-for-provisioning
+	fabric:create --new-user admin --new-user-password admin --zookeeper-password admin --wait-for-provisioning
 
 this creates a Fuse fabric
 
-	karaf@root> fabric:container-create-child root child 2
+	fabric:container-create-child root child 2
 
 this creates two child containers
 
-	karaf@root> fabric:container-list
+	fabric:container-list
 
 This will confirm what you have created.
 
-	karaf@root> fabric:profile-create --parents feature-camel aggregator-app
+	fabric:profile-create --parents feature-camel aggregator-app
 
 This creates a profile based on the feature-camel profile, it will be used as the basis for the profiles that we will use for the two containers.
 
-	karaf@root> fabric:profile-create --parents aggregator-app aggregator-app-child1
-	karaf@root> fabric:profile-create --parents aggregator-app aggregator-app-child2
+	fabric:profile-create --parents aggregator-app aggregator-app-child1
+	fabric:profile-create --parents aggregator-app aggregator-app-child2
 
 This creates two profiles based on the aggregator-app profile created previously.
 
-	karaf@root> fabric:profile-edit aggregator-app
+	fabric:profile-edit aggregator-app
 
 This will open the fabric profile editor, edit it so that it has the following contents:
 
@@ -109,7 +109,7 @@ This will open the fabric profile editor, edit it so that it has the following c
 
 save and exit. Then
 
-	karaf@root> fabric:profile-edit --pid aggregatorapp aggregator-app-child1
+	fabric:profile-edit --pid aggregatorapp aggregator-app-child1
 
 This will open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child1 profile , edit it so that it has the following contents:
 
@@ -122,7 +122,7 @@ This will open the fabric editor for the PID properties 'aggregatorapp' for the 
 
 save and exit. Then
 
-	karaf@root> fabric:profile-edit --pid aggregatorapp aggregator-app-child2
+	fabric:profile-edit --pid aggregatorapp aggregator-app-child2
 
 This will open the fabric editor for the PID properties 'aggregatorapp' for the aggregator-app-child1 profile , edit it so that it has the following contents:
 
@@ -135,13 +135,11 @@ This will open the fabric editor for the PID properties 'aggregatorapp' for the 
 
 save and exit. Then
 
-	karaf@root> fabric:container-change-profile child1 aggregator-app-child1
-	karaf@root> fabric:container-change-profile child2 aggregator-app-child2
+	fabric:container-change-profile child1 aggregator-app-child1
+	fabric:container-change-profile child2 aggregator-app-child2
 
 and then back in the project directory run the following command
 
     mvn exec:java
 
 and you should see 'UK' messages in the aggregator.outputpath you chose for the UK and 'US' messages in the aggregator,outputpath you chose for the US.
-
-Another useful thing to do is to set up a fault tolerant JBoss A-MQ installation so that the failover broker URL can be demonstrated (you will notice these URLs being commented out).
