@@ -38,7 +38,7 @@ To build without running the unit test
 
     mvn clean install -Dmaven.test.skip=true
 
-Deploying to JBoss Fuse (standlone)
+Deploying to JBoss Fuse (standalone)
 -----------------------
 
 To install in JBoss Fuse
@@ -81,7 +81,7 @@ In the JBoss Fuse Console create a Fuse fabric
 
 then create a master slave broker cluster with 3 brokers (the <PATH TO SHARED FILESYSTEM> can a be local directory for the purposes of testing)
 
-mq-create --create-container broker --replicas 3 --group masterslave --data <PATH TO SHARED FILESYSTEM> hq-broker
+	mq-create --create-container broker --replicas 3 --group masterslave --data <PATH TO SHARED FILESYSTEM> hq-broker
 
 then create two fabric child container 
 
