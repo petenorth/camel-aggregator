@@ -1,7 +1,7 @@
 Camel-Aggregator Camel OSGi example
 =============================
 
-This project demonstrates a Camel project that implements the Aggregator EIP. It is deployed as a OSGi bundle, has a unit test and
+This project demonstrates a Camel (Spring) project that implements the Aggregator EIP. It is deployed as a OSGi bundle, has a unit test and
 a test client that uses Camel. The camel route consumes from three activemq queues (foo, bar, and) with a 'CountryCode' message header selector and then sends these to a 'direct:start' producer endpoint.
 A corresponding 'direct:start' consumer then aggregates the messages correlating the messages based on a header with name 'aggregatorid', there is a message count condition fixed at 3 (corresponding receiving messages from 3 queues). The aggregator implementation writes the content of each correlated message received on a separate line into a single file.  
 
