@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/blueprint"
+       xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+       xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+       
+    <!-- Getting the properties file from OSGi -->
+    <cm:property-placeholder xmlns="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0" id="preProps" persistent-id="aggregatorapp" /> 
+
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="brokerURL" value="${brokerurl}"/>
+		<property name="userName" value="admin"/>
+		<property name="password" value="admin"/>
+	</bean>
+
+	<bean id="userRoutes" class="org.pfry.camel.aggregator.route.AggregatorRouteBuilder" >
+	    <property name="countryCode" value="${country.code}"/>
+	</bean>
+
+	<camelContext id="myCamel" xmlns="http://camel.apache.org/schema/blueprint">
+       <routeBuilder ref="userRoutes"/>
+    </camelContext>
+</blueprint>
