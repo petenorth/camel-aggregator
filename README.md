@@ -38,7 +38,7 @@ To build without running the unit test
 
     mvn clean install -Dmaven.test.skip=true
 
-Deploying to JBoss Fuse (standlone)
+Deploying to JBoss Fuse (standalone)
 -----------------------
 
 To install in JBoss Fuse
