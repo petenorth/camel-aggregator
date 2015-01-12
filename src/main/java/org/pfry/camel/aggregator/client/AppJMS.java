@@ -1,41 +1,53 @@
 package org.pfry.camel.aggregator.client;
 import java.util.Random;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
-import javax.jms.ExceptionListener;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+
+import org.apache.activemq.ActiveMQConnectionFactory;
  
 public class AppJMS {
  
 	private static final String BROKER_USERNAME = "admin";
     private static final String BROKER_PASSWORD = "admin";
     //private static final String BROKER_URL = "tcp://localhost:61616";
-    private static final String BROKER_URL = "failover://tcp://amq-node2:61616,tcp://amq-node1:61616";
-
+    //private static final String BROKER_URL = "failover://tcp://amq-node2:61616,tcp://amq-node1:61616";
+    private String brokerURL;  // = "discovery:(fabric:masterslave)";
 
     public static void main(String[] args) throws Exception {
     	
-    	sendMessages("UK");
-    	sendMessages("US");
+    	AppJMS appJMS = null;
+    	
+    	if( args.length == 0 )
+    	{
+    		appJMS = new AppJMS("tcp://localhost:61616");
+    	}
+    	else
+    	{
+    		appJMS = new AppJMS(args[0]);
+    	}
+    	
+    	appJMS.sendMessages("UK");
+    	appJMS.sendMessages("US");
+    }
+    
+    public AppJMS(String brokerURL)
+    {
+    	this.brokerURL = brokerURL;
     }
 
-	private static void sendMessages(String countryCode) {
+	private void sendMessages(String countryCode) {
 		for( int i = 0; i<3; i++)
     	{
     		String aggregationid = Integer.toString(new Random().nextInt());
             
-    		thread(new HelloWorldProducer("foo", "Scott " + countryCode, aggregationid, countryCode), false);
-    		thread(new HelloWorldProducer("bar", "Brad " + countryCode, aggregationid, countryCode), false);
-    		thread(new HelloWorldProducer("and", "Gary " + countryCode, aggregationid, countryCode), false);	 
+    		thread(new HelloWorldProducer(brokerURL, "foo", "Scott " + countryCode, aggregationid, countryCode), false);
+    		thread(new HelloWorldProducer(brokerURL, "bar", "Brad " + countryCode, aggregationid, countryCode), false);
+    		thread(new HelloWorldProducer(brokerURL, "and", "Gary " + countryCode, aggregationid, countryCode), false);	 
     	}
 	}
  
@@ -51,9 +63,11 @@ public class AppJMS {
     	private String text;
     	private String aggregationid;
     	private String countryCode;
+    	private String brokerURL;
     	
-    	public HelloWorldProducer(String queue, String message, String aggregationid, String countryCode)
+    	public HelloWorldProducer(String brokerURL, String queue, String message, String aggregationid, String countryCode)
     	{
+    		this.brokerURL = brokerURL;
     		this.queue = queue;
     		this.text = message;
     		this.aggregationid = aggregationid;
@@ -62,7 +76,7 @@ public class AppJMS {
         public void run() {
             try {
                 // Create a ConnectionFactory
-                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(BROKER_URL);
+                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(this.brokerURL);
                 connectionFactory.setUserName(BROKER_USERNAME);
                 connectionFactory.setPassword(BROKER_PASSWORD);
  

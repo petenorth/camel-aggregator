@@ -34,7 +34,8 @@
 
         <camel.version>2.12.0.redhat-611412</camel.version>
         <activemq.version>5.9.0.redhat-611412</activemq.version>
-
+        <fabric.version>1.0.0.redhat-412</fabric.version>
+        <osgi.version>4.3.1</osgi.version>
         <slf4j.version>1.6.6</slf4j.version>
     </properties>
 
@@ -152,6 +153,31 @@
 	       <scope>test</scope>
         </dependency>
         
+<dependency>
+    <groupId>org.jboss.amq</groupId>
+    <artifactId>mq-fabric</artifactId>
+    <version>6.1.1.redhat-412</version>
+</dependency>
+<dependency>
+    <groupId>io.fabric8</groupId>
+    <artifactId>fabric-groups</artifactId>
+    <version>${fabric.version}</version>
+</dependency>
+<dependency>
+    <groupId>io.fabric8</groupId>
+    <artifactId>fabric-zookeeper</artifactId>
+    <version>${fabric.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.core</artifactId>
+    <version>${osgi.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.compendium</artifactId>
+    <version>${osgi.version}</version>
+</dependency>        
 
         <dependency>
             <groupId>org.slf4j</groupId>

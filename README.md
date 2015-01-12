@@ -15,7 +15,6 @@ Prebuild
 
     cat ><JBOSS FUSE HOME>/etc/aggregatorapp.cfg <<EOL
     brokerurl=tcp://localhost:61616
-    #brokerurl=failover://tcp://amq-node2:61616,tcp://amq-node1:61616
     brokerusername=admin
     brokerpassword=admin
     aggregator.outputpath=<SOME PATH TO A DIRECTORY FOR THE OUTPUT FILES>
@@ -80,6 +79,10 @@ In the JBoss Fuse Console create a Fuse fabric
 
 	karaf@root> fabric:create --new-user admin --new-user-password admin --zookeeper-password admin --wait-for-provisioning
 
+then create a master slave broker cluster with 3 brokers (the <PATH TO SHARED FILESYSTEM> can a be local directory for the purposes of testing)
+
+mq-create --create-container broker --replicas 3 --group masterslave --data <PATH TO SHARED FILESYSTEM> hq-broker
+
 then create two fabric child container 
 
 	karaf@root> fabric:container-create-child root child 2
@@ -116,8 +119,7 @@ Open the fabric editor for the PID properties 'aggregatorapp' for the aggregator
 
 edit it so that it has the following contents:
 
-	brokerurl=tcp://localhost:61616
-	#brokerurl=failover://tcp://amq-node2:61616,tcp://amq-node1:61616
+	brokerurl=discovery:(fabric:masterslave)
 	brokerusername=admin
 	brokerpassword=admin
 	aggregator.outputpath=<PATH TO WHERE YOU WANT THE UK MESSAGES TO GO>
@@ -131,8 +133,7 @@ Open the fabric editor for the PID properties 'aggregatorapp' for the aggregator
 
 edit it so that it has the following contents:
 
-	brokerurl=tcp://localhost:61616
-	#brokerurl=failover://tcp://amq-node2:61616,tcp://amq-node1:61616
+	brokerurl=discovery:(fabric:masterslave)
 	brokerusername=admin
 	brokerpassword=admin
 	aggregator.outputpath=<PATH TO WHERE YOU WANT THE US MESSAGES TO GO>
@@ -145,8 +146,7 @@ save and exit. Then associate the profiles with the child containers.
 
 and then back in the project directory run the following command
 
-    mvn exec:java
+    mvn exec:java -Dexec.args="discovery:(fabric:masterslave)"
 
 and you should see 'UK' messages in the aggregator.outputpath you chose for the UK and 'US' messages in the aggregator,outputpath you chose for the US.
 
-Another useful thing to do is to set up a fault tolerant JBoss A-MQ installation so that the failover broker URL can be demonstrated (you will notice these URLs being commented out).
