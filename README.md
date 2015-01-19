@@ -75,7 +75,9 @@ For background see:
 
 https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.1/html/Fabric_Guide/index.html
 
-In the JBoss Fuse Console create a Fuse fabric
+In the JBoss Fuse Console create a Fuse fabric 
+
+NOTE If you use a VPN (virtual private network) on your local machine, it is advisable to log off VPN before you create the fabric and to stay logged off while you are using the local container. A local Fabric Server is permanently associated with a fixed IP address or hostname. If VPN is enabled when you create the fabric, the underlying Java runtime is liable to detect and use the VPN hostname instead of your permanent local hostname. This can also be an issue with multi-homed machines. To be absolutely sure about the hostname, you could specify the IP address explicitly—see section "Creating a New Fabric" in "Fabric Guide". 
 
 	karaf@root> fabric:create --new-user admin --new-user-password admin --zookeeper-password admin --wait-for-provisioning
 
